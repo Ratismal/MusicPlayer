@@ -6,6 +6,7 @@ import io.github.ratismal.musicplayer.handler.MouseHandler;
 import io.github.ratismal.musicplayer.lib.LibDisplay;
 import io.github.ratismal.musicplayer.lib.LibTexture;
 import io.github.ratismal.musicplayer.windows.InstanceSwitcher;
+import javafx.application.Application;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -32,6 +33,7 @@ public class MainWindow {
     }
 
     public void start() {
+
         mouse = new MouseHandler();
         LibDisplay.init();
         initGL(LibDisplay.main);

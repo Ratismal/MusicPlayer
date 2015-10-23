@@ -132,7 +132,7 @@ public class RenderHelper {
         renderString(text, x1 + rect.getWidth() / 2 - font.getWidth(text) / 2, y1 + rect.getHeight() / 2 - font.getHeight(text) / 2, colour);
     }
 
-    public void renderQuad(Texture texture, Rectangle rect) {
+    public static void renderQuad(Texture texture, Rectangle rect) {
         org.newdawn.slick.Color.white.bind();
         texture.bind();
 

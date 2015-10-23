@@ -63,8 +63,10 @@ public class InstanceMainMenu extends Instance {
             System.out.println("Refreshing buttons");
             files.clear();
             buttonList.clear();
-            checkButtons();
+            contents.clear();
             populateIndex();
+            checkButtons();
+
             getButtons();
 
             refresh = false;
