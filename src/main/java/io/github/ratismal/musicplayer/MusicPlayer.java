@@ -45,28 +45,6 @@ public class MusicPlayer {
 
     }
 
-    public static void loadJarDll(String name) throws IOException {
-        InputStream in = MusicPlayer.class.getResourceAsStream(name);
-        if (in == null) {
-            System.out.println("Cannot get resource \"" + name + "\" from Jar file.");
-            return;
-        }
-        byte[] buffer = new byte[1024];
-        MusicPlayer.class.getResource(name);
-        int read = -1;
-        File temp = new File(new File(System.getProperty("java.io.tmpdir")), name);
-        FileOutputStream fos = new FileOutputStream(temp);
-
-        while ((read = in.read(buffer)) != -1) {
-            fos.write(buffer, 0, read);
-        }
-        fos.close();
-        in.close();
-
-        System.load(temp.getAbsolutePath());
-        System.out.println("Loaded " + name);
-    }
-
     private static void loadLib(String name) {
         try {
             File fileOut = new File(name);
