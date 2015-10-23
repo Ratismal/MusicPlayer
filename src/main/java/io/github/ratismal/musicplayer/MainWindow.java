@@ -3,6 +3,8 @@ package io.github.ratismal.musicplayer;
 
 import io.github.ratismal.musicplayer.draw.RenderHelper;
 import io.github.ratismal.musicplayer.handler.MouseHandler;
+import io.github.ratismal.musicplayer.lib.LibDisplay;
+import io.github.ratismal.musicplayer.lib.LibTexture;
 import io.github.ratismal.musicplayer.windows.InstanceSwitcher;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
@@ -31,8 +33,10 @@ public class MainWindow {
 
     public void start() {
         mouse = new MouseHandler();
-        initGL(1280, 720);
-        rh.initFont("Courier New", Font.BOLD, 48);
+        LibDisplay.init();
+        initGL(LibDisplay.main);
+        LibTexture.init();
+        rh.initFont("Courier New", Font.BOLD, 16);
         while (true) {
             GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
@@ -52,7 +56,7 @@ public class MainWindow {
         }
     }
 
-    public void initGL(int width, int height) {
+    public void initGL(DisplayMode mode) {
         /*
         try {
             Display.setDisplayMode(new DisplayMode(x, y));
@@ -72,16 +76,16 @@ public class MainWindow {
 */
 
         try {
-            Display.setDisplayMode(new DisplayMode(width, height));
+            Display.setDisplayMode(mode);
             Display.create();
             Display.setVSyncEnabled(true);
             Display.setResizable(true);
-            Display.setTitle("Japanese Quiz");
+            Display.setTitle("Music Player");
         } catch (LWJGLException e) {
             e.printStackTrace();
             System.exit(0);
         }
-        initOtherGL(width, height);
+        initOtherGL(mode.getWidth(), mode.getHeight());
     }
 
     public void initOtherGL(int width, int height) {

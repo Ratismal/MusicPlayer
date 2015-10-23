@@ -6,7 +6,7 @@ import io.github.ratismal.musicplayer.button.ButtonHalf;
 import io.github.ratismal.musicplayer.button.ButtonLong;
 import io.github.ratismal.musicplayer.handler.MouseHandler;
 import io.github.ratismal.musicplayer.lib.LibTexture;
-import musicplayer.windows.InstanceSwitcher;
+import io.github.ratismal.musicplayer.windows.InstanceSwitcher;
 import org.lwjgl.opengl.Display;
 
 import java.io.File;

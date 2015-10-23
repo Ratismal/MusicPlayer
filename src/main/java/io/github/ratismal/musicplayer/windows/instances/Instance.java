@@ -4,8 +4,8 @@ import io.github.ratismal.musicplayer.button.Button;
 import io.github.ratismal.musicplayer.button.IButton;
 import io.github.ratismal.musicplayer.handler.MouseHandler;
 import io.github.ratismal.musicplayer.util.LoggerHelper;
-import musicplayer.windows.IWindowInstance;
-import musicplayer.windows.InstanceSwitcher;
+
+import io.github.ratismal.musicplayer.windows.IWindowInstance;
 import org.lwjgl.opengl.Display;
 
 import java.util.ArrayList;

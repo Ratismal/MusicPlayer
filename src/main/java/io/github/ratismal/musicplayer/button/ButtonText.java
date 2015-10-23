@@ -11,7 +11,7 @@ import org.newdawn.slick.opengl.Texture;
 public class ButtonText extends Button {
 
     protected String text;
-    protected boolean left = true;
+    protected boolean left = false;
 
     public ButtonText(int id, Texture texture, Rectangle rect) {
         super(id, texture, rect);
@@ -24,8 +24,10 @@ public class ButtonText extends Button {
 
     @Override
     public void draw() {
-        super.draw();
-        if (text != null)
-            RenderHelper.renderString(text, rect);
+        if (visible) {
+            super.draw();
+            if (text != null)
+                RenderHelper.renderString(text, rect, left);
+        }
     }
 }

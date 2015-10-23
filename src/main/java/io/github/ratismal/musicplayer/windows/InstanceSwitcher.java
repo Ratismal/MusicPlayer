@@ -3,8 +3,10 @@ package io.github.ratismal.musicplayer.windows;
 
 import io.github.ratismal.musicplayer.draw.RenderHelper;
 import io.github.ratismal.musicplayer.handler.MouseHandler;
-import musicplayer.windows.instances.InstanceMainMenu;
-import musicplayer.windows.instances.InstanceOptionMenu;
+
+import io.github.ratismal.musicplayer.lib.LibTexture;
+import io.github.ratismal.musicplayer.windows.instances.InstanceMainMenu;
+import io.github.ratismal.musicplayer.windows.instances.InstanceOptionMenu;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -20,14 +22,14 @@ public class InstanceSwitcher {
 
     public InstanceSwitcher(RenderHelper rh) {
         this.rh = rh;
-        this.mainMenu = new InstanceMainMenu(rh);
-        this.optionMenu = new InstanceOptionMenu(rh);
+        this.mainMenu = new InstanceMainMenu();
+        this.optionMenu = new InstanceOptionMenu();
     }
 
     public void renderInstance() {
         //glViewport(0, 0, Display.getWidth(), Display.getHeight());
         //glOrtho(0, Display.getWidth(), Display.getHeight(), 0, 1, -1);
-        rh.renderBackground("gui/background");
+        rh.renderBackground(LibTexture.background);
         switch(instance) {
             case 0:
                 mainMenu.render();

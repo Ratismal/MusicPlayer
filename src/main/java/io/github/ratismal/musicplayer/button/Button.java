@@ -15,12 +15,21 @@ public class Button implements IButton{
     protected final Rectangle rect;
     protected Texture texture;
 
+    protected boolean visible = true;
+
     public Button(int id, Texture texture, Rectangle rect) {
         this.id = id;
         this.rect = rect;
         this.texture = texture;
     }
 
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
 
     @Override
     public int getId() {
@@ -29,19 +38,21 @@ public class Button implements IButton{
 
     @Override
     public void draw() {
-        org.newdawn.slick.Color.white.bind();
-        texture.bind();
+        if (visible) {
+            org.newdawn.slick.Color.white.bind();
+            texture.bind();
 
-        GL11.glBegin(GL11.GL_QUADS);
-        GL11.glTexCoord2f(0, 0);
-        GL11.glVertex2f(getX1(), getY1());
-        GL11.glTexCoord2f(1, 0);
-        GL11.glVertex2f(getX2(), getY1());
-        GL11.glTexCoord2f(1, 1);
-        GL11.glVertex2f(getX2(), getY2());
-        GL11.glTexCoord2f(0, 1);
-        GL11.glVertex2f(getX1(), getY2());
-        GL11.glEnd();
+            GL11.glBegin(GL11.GL_QUADS);
+            GL11.glTexCoord2f(0, 0);
+            GL11.glVertex2f(getX1(), getY1());
+            GL11.glTexCoord2f(1, 0);
+            GL11.glVertex2f(getX2(), getY1());
+            GL11.glTexCoord2f(1, 1);
+            GL11.glVertex2f(getX2(), getY2());
+            GL11.glTexCoord2f(0, 1);
+            GL11.glVertex2f(getX1(), getY2());
+            GL11.glEnd();
+        }
     }
 
     @Override

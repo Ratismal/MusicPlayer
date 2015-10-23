@@ -22,7 +22,7 @@ public class RenderHelper {
     public void initTexture(String resource) {
 
         try {
-            texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("src/resources/" + resource + ".png"));
+            texture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("src/main/resources/" + resource + ".png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -34,10 +34,9 @@ public class RenderHelper {
         font = new TrueTypeFont(awtFont, false);
     }
 
-    public void renderBackground(String resource) {
+    public void renderBackground(Texture background) {
         org.newdawn.slick.Color.white.bind();
-        initTexture(resource);
-        texture.bind();
+        background.bind();
 
         GL11.glBegin(GL11.GL_QUADS);
         GL11.glTexCoord2f(0f, 0f);
@@ -153,6 +152,7 @@ public class RenderHelper {
         GL11.glVertex2f(x1, y2);
         GL11.glEnd();
     }
+
     public static void renderQuad(Color color, Rectangle rect) {
         color.bind();
 
@@ -179,17 +179,20 @@ public class RenderHelper {
     }
 
     public static void renderString(String text, Rectangle rect, org.newdawn.slick.Color colour) {
-        font.drawString(rect.getX() + rect.getWidth()/2 - font.getWidth(text)/2, rect.getY() + rect.getHeight()/2 - font.getHeight(text)/2, text, colour);
+        font.drawString(rect.getX() + rect.getWidth() / 2 - font.getWidth(text) / 2, rect.getY() + rect.getHeight() / 2 - font.getHeight(text) / 2, text, colour);
     }
 
-    public static void renderString(String text, Rectangle rect) {
-        font.drawString(rect.getX() + rect.getWidth()/2 - font.getWidth(text)/2, rect.getY() + rect.getHeight()/2 - font.getHeight(text)/2, text, Color.black);
+    public static void renderString(String text, Rectangle rect, boolean left) {
+        if (!left)
+            font.drawString(rect.getX() + rect.getWidth() / 2 - font.getWidth(text) / 2, rect.getY() + rect.getHeight() / 2 - font.getHeight(text) / 2, text, Color.black);
+        else
+            font.drawString(8 + rect.getX(), rect.getY() + rect.getHeight() / 2 - font.getHeight(text) / 2, text, Color.black);
     }
 
     public static Texture getTexture(String resource) {
 
         try {
-            return TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("src/resources/" + resource + ".png"));
+            return TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("src/main/resources/" + resource + ".png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
