@@ -229,6 +229,17 @@ public class RenderHelper {
     public static void renderString(String text, Rectangle rect, org.newdawn.slick.Color colour) {
         font.drawString(rect.getX() + rect.getWidth() / 2 - font.getWidth(text) / 2, rect.getY() + rect.getHeight() / 2 - font.getHeight(text) / 2, text, colour);
     }
+    public static void renderTitle(String text, Rectangle rect, org.newdawn.slick.Color colour) {
+        if (font.getWidth(text) > 390) {
+            int split = text.indexOf(text.split(" ")[text.split(" ").length/2]);
+            font.drawString(rect.getX() + rect.getWidth() / 2 - font.getWidth(text.substring(split)) / 2, rect.getY() + rect.getHeight() / 2 - font.getHeight(text.substring(split)) / 2, text.substring(split), colour);
+            Rectangle rect2 = new Rectangle(0, 380, 400, 24);
+            font.drawString(rect2.getX() + rect2.getWidth() / 2 - font.getWidth(text.substring(0, split)) / 2, rect2.getY() + rect2.getHeight() / 2 - font.getHeight(text.substring(0, split)) / 2, text.substring(0, split), colour);
+
+        } else {
+            font.drawString(rect.getX() + rect.getWidth() / 2 - font.getWidth(text) / 2, rect.getY() + rect.getHeight() / 2 - font.getHeight(text) / 2, text, colour);
+        }
+    }
 
     public static void renderString(String text, Rectangle rect, boolean left) {
         if (!left)

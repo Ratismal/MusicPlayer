@@ -3,6 +3,7 @@ package io.github.ratismal.musicplayer.windows.instances;
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.Mp3File;
 import io.github.ratismal.musicplayer.button.Button;
+import io.github.ratismal.musicplayer.button.ButtonHalf;
 import io.github.ratismal.musicplayer.button.ButtonLong;
 import io.github.ratismal.musicplayer.draw.RenderHelper;
 import io.github.ratismal.musicplayer.handler.MouseHandler;
@@ -28,6 +29,7 @@ import javax.sound.sampled.Clip;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.PrintWriter;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,12 +47,15 @@ public class InstanceSongDisplay extends Instance {
     public static boolean first = true;
     Button back;
     Button small;
+    Button vol;
     byte[] imageData;
     Mp3File song;
     BufferedImage img;
     Texture texture = null;
     MediaPlayer mp;
     double length;
+    int volume = 5;
+    boolean volChanged = false;
 
     public List<File> songs = new ArrayList<File>();
 
@@ -63,6 +68,13 @@ public class InstanceSongDisplay extends Instance {
         if (back == null) {
             back = new ButtonLong(0, LibTexture.buttonLong, 16, 450, "Back");
             small = new ButtonLong(1, LibTexture.buttonLong, 152, 450, "Smaller");
+            vol = new ButtonHalf(2, LibTexture.buttonHalf, 300, 450, String.valueOf(volume));
+        }
+        if (volChanged) {
+            System.out.println("Changing volume");
+            vol.setText(String.valueOf(volume));
+            mp.setVolume(((double) volume) / 10);
+            volChanged = false;
         }
         if (first) {
             for (File file : InstanceMainMenu.contents) {
@@ -93,8 +105,7 @@ public class InstanceSongDisplay extends Instance {
         if (texture != null) {
             RenderHelper.renderAlbum(texture);
         }
-
-        RenderHelper.renderString(song.getId3v2Tag().getTitle(), new Rectangle(0, 400, 400, 24), Color.white);
+        RenderHelper.renderTitle(song.getId3v2Tag().getTitle(), new Rectangle(0, 400, 400, 24), Color.white);
 
         update();
         super.drawButtons();
@@ -111,6 +122,11 @@ public class InstanceSongDisplay extends Instance {
             length = song.getLengthInMilliseconds() / 1000;
             if (song.hasId3v2Tag()) {
                 ID3v2 id3v2tag = song.getId3v2Tag();
+                new File("song-playing.txt").delete();
+                PrintWriter writer = new PrintWriter("song-playing.txt", "UTF-8");
+                writer.println(id3v2tag.getTitle());
+                writer.close();
+
                 if (id3v2tag.getAlbumImage() != null) {
                     imageData = id3v2tag.getAlbumImage();
                     //converting the bytes to an image
@@ -127,8 +143,10 @@ public class InstanceSongDisplay extends Instance {
         hit = new Media(bip.replace(" ", "%20"));
         mp = new MediaPlayer(hit);
         mp.setAutoPlay(false);
+        mp.setVolume(((double) volume) / 10);
         mp.play();
         songs.remove(rand);
+
     }
 
     public void update() {
@@ -141,6 +159,7 @@ public class InstanceSongDisplay extends Instance {
     public void getButtons() {
         buttonList.add(back);
         buttonList.add(small);
+        buttonList.add(vol);
     }
 
     @Override
@@ -172,6 +191,14 @@ public class InstanceSongDisplay extends Instance {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                break;
+            case 2:
+                if (volume > 1) {
+                    volume--;
+                } else {
+                    volume = 10;
+                }
+                volChanged = true;
                 break;
         }
 

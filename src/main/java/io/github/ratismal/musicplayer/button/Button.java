@@ -90,4 +90,8 @@ public class Button implements IButton{
         return (x >= getX1() && x <= getX2()) && ((y >= getY1() && y <= getY2()));
     }
 
+    public void setText(String newText) {
+        //null
+    }
+
 }

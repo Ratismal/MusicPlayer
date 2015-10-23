@@ -153,6 +153,7 @@ public class InstanceMainMenu extends Instance {
                 if (currentDir.getParentFile() != null) {
                     currentDir = currentDir.getParentFile();
                     refresh = true;
+                    page = 0;
                 }
                 break;
             case 36:
@@ -167,6 +168,7 @@ public class InstanceMainMenu extends Instance {
                 if (thing.isDirectory()) {
                     currentDir = thing;
                 }
+                page = 0;
                 refresh = true;
                 break;
         }

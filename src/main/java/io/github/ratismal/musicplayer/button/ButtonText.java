@@ -30,4 +30,9 @@ public class ButtonText extends Button {
                 RenderHelper.renderString(text, rect, left);
         }
     }
+
+    @Override
+    public void setText(String newText) {
+        text = newText;
+    }
 }
