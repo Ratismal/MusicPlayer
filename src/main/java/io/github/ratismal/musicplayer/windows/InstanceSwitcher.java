@@ -6,7 +6,7 @@ import io.github.ratismal.musicplayer.handler.MouseHandler;
 
 import io.github.ratismal.musicplayer.lib.LibTexture;
 import io.github.ratismal.musicplayer.windows.instances.InstanceMainMenu;
-import io.github.ratismal.musicplayer.windows.instances.InstanceOptionMenu;
+import io.github.ratismal.musicplayer.windows.instances.InstanceSongDisplay;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -17,13 +17,13 @@ public class InstanceSwitcher {
 
     private RenderHelper rh;
     private InstanceMainMenu mainMenu;
-    private InstanceOptionMenu optionMenu;
+    private InstanceSongDisplay optionMenu;
     private static int instance = 0;
 
     public InstanceSwitcher(RenderHelper rh) {
         this.rh = rh;
         this.mainMenu = new InstanceMainMenu();
-        this.optionMenu = new InstanceOptionMenu();
+        this.optionMenu = new InstanceSongDisplay();
     }
 
     public void renderInstance() {

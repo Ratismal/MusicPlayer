@@ -84,11 +84,15 @@ public class InstanceMainMenu extends Instance {
     public void populateIndex() {
 
         files.clear();
+        contents.clear();
+
         for (final File fileEntry : currentDir.listFiles()) {
             if (fileEntry.isDirectory() && (!fileEntry.isHidden() || showHidden))
                 files.add(fileEntry);
-            else
+            else {
+                System.out.println("Adding file to contents");
                 contents.add(fileEntry);
+            }
         }
         refresh = false;
 
@@ -123,6 +127,7 @@ public class InstanceMainMenu extends Instance {
         switch (id) {
             case 32:
                 if (containsMp3())
+                    InstanceSongDisplay.first = true;
                     InstanceSwitcher.setInstance(1);
                 break;
             case 37:

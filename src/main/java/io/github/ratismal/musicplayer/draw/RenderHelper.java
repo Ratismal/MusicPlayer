@@ -1,5 +1,6 @@
 package io.github.ratismal.musicplayer.draw;
 
+import io.github.ratismal.musicplayer.MusicPlayer;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Rectangle;
@@ -153,6 +154,53 @@ public class RenderHelper {
         GL11.glEnd();
     }
 
+
+    public static void renderAlbum(Texture texture) {
+        org.newdawn.slick.Color.white.bind();
+        texture.bind();
+
+        float xTex = ((float) texture.getImageWidth()) / ((float) texture.getTextureWidth());
+        float yTex = ((float) texture.getImageHeight()) / ((float) texture.getTextureHeight());
+
+        int x1 = 0;
+        int x2 = 400;
+        int y1 = 0;
+        int y2 = 400;
+        try {
+            if (texture.getImageWidth() > texture.getImageHeight()) {
+                int newHeight = texture.getImageHeight() / (texture.getImageWidth() / 400);
+                //System.out.println(newHeight);
+                y1 = (400 - newHeight) / 2;
+                y2 = 400 - (400 - newHeight) / 2;
+
+            } else if (texture.getImageWidth() < texture.getImageHeight()) {
+                int newWidth = texture.getImageWidth() / (texture.getImageHeight() / 400);
+                x1 = (400 - newWidth) / 2;
+                x2 = 400 - (400 - newWidth) / 2;
+            }
+        } catch (Exception e) {
+            //uh oh!
+
+            //...
+
+            //AND WE JUST WALK AWAY!
+        }
+
+
+        //System.out.println("Dimensions: " + texture.getImageWidth() + " " + texture.getImageHeight() + " " + texture.getTextureWidth() + " " + texture.getTextureHeight());
+        //System.out.println("Ratios: " + xTex + " " + yTex);
+        GL11.glBegin(GL11.GL_QUADS);
+        GL11.glTexCoord2f(0, 0);
+        GL11.glVertex2f(x1, y1);
+        GL11.glTexCoord2f(xTex, 0);
+        GL11.glVertex2f(x2, y1);
+        GL11.glTexCoord2f(xTex, yTex);
+        GL11.glVertex2f(x2, y2);
+        GL11.glTexCoord2f(0, yTex);
+        GL11.glVertex2f(x1, y2);
+        GL11.glEnd();
+    }
+
     public static void renderQuad(Color color, Rectangle rect) {
         color.bind();
 
@@ -192,7 +240,11 @@ public class RenderHelper {
     public static Texture getTexture(String resource) {
 
         try {
-            return TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("src/main/resources/" + resource + ".png"));
+            if (MusicPlayer.class.getResource("MusicPlayer.class").toString().startsWith("jar")) {
+                return TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(resource + ".png"));
+            } else {
+                return TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("src/main/resources/" + resource + ".png"));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

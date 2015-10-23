@@ -37,21 +37,24 @@ import java.util.concurrent.ThreadLocalRandom;
  * Created by Ratismal on 2015-09-15.
  */
 
-public class InstanceOptionMenu extends Instance {
+public class InstanceSongDisplay extends Instance {
 
+    String bip;
+    Media hit;
     boolean refresh = true;
-
+    public static boolean first = true;
     Button back;
     Button small;
-
+    byte[] imageData;
     Mp3File song;
     BufferedImage img;
     Texture texture = null;
     MediaPlayer mp;
+    double length;
 
     public List<File> songs = new ArrayList<File>();
 
-    public InstanceOptionMenu() {
+    public InstanceSongDisplay() {
         JFXPanel fxPanel = new JFXPanel();
     }
 
@@ -61,62 +64,71 @@ public class InstanceOptionMenu extends Instance {
             back = new ButtonLong(0, LibTexture.buttonLong, 16, 450, "Back");
             small = new ButtonLong(1, LibTexture.buttonLong, 152, 450, "Smaller");
         }
-        if (songs.size() == 0) {
-            songs.addAll(InstanceMainMenu.contents);
-            int rand = ThreadLocalRandom.current().nextInt(0, songs.size());
-
-            try {
-                song = new Mp3File(songs.get(rand).getPath());
-                if (song.hasId3v2Tag()) {
-                    ID3v2 id3v2tag = song.getId3v2Tag();
-                    byte[] imageData = id3v2tag.getAlbumImage();
-                    //converting the bytes to an image
-                    img = ImageIO.read(new ByteArrayInputStream(imageData));
-                    texture = BufferedImageUtil.getTexture("", img);
+        if (first) {
+            for (File file : InstanceMainMenu.contents) {
+                if (file.getName().endsWith(".mp3")) {
+                    songs.add(file);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+            first = false;
+            play();
+        }
 
-            play(songs.get(rand), rand);
-
-
-
-
+        //System.out.println(length + " " + mp.getCurrentTime().toSeconds());
+        if (mp.getCurrentTime().toSeconds() > length) {
+            if (songs.size() > 0) {
+                mp.stop();
+                play();
+            } else {
+                for (File file : InstanceMainMenu.contents) {
+                    if (file.getName().endsWith(".mp3")) {
+                        songs.add(file);
+                    }
+                }
+                play();
+            }
         }
 
 
-        RenderHelper.renderQuad(texture, new Rectangle(0, 0, Display.getWidth(), Display.getWidth()));
-        RenderHelper.renderString(song.getId3v2Tag().getTitle(), new Rectangle(0, 400, 400, 24), Color.white);
+        if (texture != null) {
+            RenderHelper.renderAlbum(texture);
+        }
 
+        RenderHelper.renderString(song.getId3v2Tag().getTitle(), new Rectangle(0, 400, 400, 24), Color.white);
 
         update();
         super.drawButtons();
 
     }
 
-    public void play(File media, int rand) {
-        try {
-            song = new Mp3File(media.getPath());
+    public void play() {
+        play(ThreadLocalRandom.current().nextInt(0, songs.size()));
+    }
 
-            String bip = media.toURI().toString();
-            Media hit = new Media(bip.replace(" ", "%20"));
-            mp = new MediaPlayer(hit);
-            mp.play();
-            songs.remove(rand);
-            mp.setOnEndOfMedia(new Runnable() {
-                @Override
-                public void run() {
-                    mp.stop();
-                    int rand = ThreadLocalRandom.current().nextInt(0, songs.size());
-                    File song = songs.get(rand);
-                    play(song, rand);
-                    return;
+    public void play(int rand) {
+        try {
+            song = new Mp3File(songs.get(rand).getPath());
+            length = song.getLengthInMilliseconds() / 1000;
+            if (song.hasId3v2Tag()) {
+                ID3v2 id3v2tag = song.getId3v2Tag();
+                if (id3v2tag.getAlbumImage() != null) {
+                    imageData = id3v2tag.getAlbumImage();
+                    //converting the bytes to an image
+                    img = ImageIO.read(new ByteArrayInputStream(imageData));
+                    texture = BufferedImageUtil.getTexture("", img);
+                } else {
+                    texture = null;
                 }
-            });
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        bip = songs.get(rand).toURI().toString();
+        hit = new Media(bip.replace(" ", "%20"));
+        mp = new MediaPlayer(hit);
+        mp.setAutoPlay(false);
+        mp.play();
+        songs.remove(rand);
     }
 
     public void update() {
